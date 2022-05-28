@@ -4,27 +4,28 @@ Game development.
 Justin: 
 
 Game design:
-medium size rooms with enemy fighting, somewhat like metroidvania
-6-8x3 rooms with 1 powerup 
-maze layout
-go towards right
-4 different directions u can go, but mostly go right
-powerup being in random place
-gates that close once u reach close to middle of a room, for combat
-1 set room before merchant
-after merchant is boss
-after boss is second area with powerup 
-second area will be leading to final boss, set layout
-grab another powerup
-final boss will require use of that powerup
-2d layout
+
+a. medium size rooms with enemy fighting, somewhat like metroidvania
+b. 6-8x3 rooms with 1 powerup 
+c. maze layout
+d. go towards right
+e. 4 different directions u can go, but mostly go right
+f. powerup being in random place
+g. gates that close once u reach close to middle of a room, for combat
+h. 1 set room before merchant
+i. after merchant is boss
+j. after boss is second area with powerup 
+k. second area will be leading to final boss, set layout
+l. grab another powerup
+m. final boss will require use of that powerup
+n. 2d layout
 
 Procedure of making game:
-begin with a player class and a room
-make collision in room
-make player class capable of attacking jumping moving and such
-make enemies and how they and the player take damage
-make the different rooms and fit them in according to entrances (data values matching)
+A begin with a player class and a room
+B make collision in room
+C make player class capable of attacking jumping moving and such
+D make enemies and how they and the player take damage
+E make the different rooms and fit them in according to entrances (data values matching)
 
 
 
