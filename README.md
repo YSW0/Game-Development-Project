@@ -21,11 +21,11 @@ m. final boss will require use of that powerup
 n. 2d layout
 
 Procedure of making game:
-A begin with a player class and a room
-B make collision in room
-C make player class capable of attacking jumping moving and such
-D make enemies and how they and the player take damage
-E make the different rooms and fit them in according to entrances (data values matching)
+A begin with a player class and a room.
+B make collision in room.
+C make player class capable of attacking jumping moving and such.
+D make enemies and how they and the player take damage.
+E make the different rooms and fit them in according to entrances (data values matching).
 
 
 
