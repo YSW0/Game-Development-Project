@@ -10,7 +10,7 @@ Final Design to specify:
 2. How NPC move around.
 ----------------------------------------------------------------------------------------------------
 Second Week Update:
-Game Plot: Story of vampires from transovania, inspired by the book "Dracula"
+Game Plot: Story of vampires from transylvania, inspired by the book "Dracula"
 
 Background: The main character is a man and he was invited to send documents for Count Dracula at Transylvania, which is some documents explainning a real estate purchase.
 
