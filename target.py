@@ -4,25 +4,25 @@ from vector import Vector2
 from constants import *
 import numpy as np
 
-class Pacman(pygame.sprite.Sprite):
+class Target(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.name = PACMAN
-        self.position = np.array([50, 384])
-
-        #self.position = Vector2(50, 384)
-
+        self.position = np.array([800, 384])
         self.directions = {STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:np.array([-1,0]), RIGHT:np.array([1,0])}
-        # self.directions = {STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}
-        self.direction = STOP
-        self.speed = 1
+        self.direction = LEFT
+        self.speed = 100
         self.radius = 10
         self.color = YELLOW
         
-        sprites_surf = pygame.image.load('hdhd.png').convert()
-        self.image = pygame.Surface([36, 45])
+        self.step = 0
+        
+
+        #sprites_surf = pygame.image.load('MainGuySpriteSheet.png').convert()
+        self.image = pygame.Surface([36, 36])
         self.rect = self.image.get_rect(center=(self.position[0], self.position[1]))
-        self.image.blit(sprites_surf, (0, 0), (0, 0, 36, 45))
+        self.image.fill(YELLOW)
+        #self.image.blit(sprites_surf, (0, 0), (0, 0, 36, 36))
 
        # Fetch the rectangle object that has the dimensions of the image
        # Update the position of this object by setting the values of rect.x and rect.y
@@ -31,23 +31,18 @@ class Pacman(pygame.sprite.Sprite):
 
 
     def update(self, dt):	
-        direction = self.getValidKey()
-        self.direction = direction
-
-        print(dt)
+        
+        self.step = self.step + dt
+        if 2 >= self.step % 5 > 1:
+            self.direction = UP
+        if 3 >= self.step % 5 > 2:
+            self.direction = RIGHT
+        if 4 >= self.step % 5 > 3:
+            self.direction = DOWN
+        else:
+            self.direction = LEFT
         self.position += self.directions[self.direction]*(self.speed*dt)
 
-    def getValidKey(self):
-        key_pressed = pygame.key.get_pressed()
-        if key_pressed[K_UP]:
-            return UP
-        if key_pressed[K_DOWN]:
-            return DOWN
-        if key_pressed[K_LEFT]:
-            return LEFT
-        if key_pressed[K_RIGHT]:
-            return RIGHT
-        return STOP
     
     def render(self, screen):
         p = self.position
@@ -55,8 +50,3 @@ class Pacman(pygame.sprite.Sprite):
 
         #pygame.draw.circle(screen, self.color, p, self.radius) #Replace it with something else
         screen.blit(self.image, p)
-
-    
-
-
-    
