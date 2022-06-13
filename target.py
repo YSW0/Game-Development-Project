@@ -11,7 +11,7 @@ class Target(pygame.sprite.Sprite):
         self.position = np.array([800, 384])
         self.directions = {STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:np.array([-1,0]), RIGHT:np.array([1,0])}
         self.direction = LEFT
-        self.speed = 100
+        self.speed = 1
         self.radius = 10
         self.color = YELLOW
         
@@ -49,4 +49,5 @@ class Target(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=p)
 
         #pygame.draw.circle(screen, self.color, p, self.radius) #Replace it with something else
-        screen.blit(self.image, p)
+        screen.blit(self.image, (p[0] - 18, p[1] - 18))
+    

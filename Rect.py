@@ -8,7 +8,8 @@ class Walls(pygame.sprite.Sprite):
         self.name = PACMAN
         pygame.sprite.Sprite.__init__(self)
         self.color = WALL
-
+        self.x = x
+        self.y = y
         sprites_surf = pygame.image.load('grass.jpg').convert()
         self.image = pygame.Surface([width, height])
         self.image.blit(sprites_surf, (0, 0))

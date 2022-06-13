@@ -20,9 +20,9 @@ class Pacman(pygame.sprite.Sprite):
         self.color = YELLOW
         
         sprites_surf = pygame.image.load('hdhd.png').convert()
-        self.image = pygame.Surface([36, 45])
+        self.image = pygame.Surface([36, 42])
         self.rect = self.image.get_rect(center=(self.position[0], self.position[1]))
-        self.image.blit(sprites_surf, (0, 0), (0, 0, 36, 45))
+        self.image.blit(sprites_surf, (0, 0), (0, 0, 36, 42))
 
        # Fetch the rectangle object that has the dimensions of the image
        # Update the position of this object by setting the values of rect.x and rect.y
@@ -33,9 +33,8 @@ class Pacman(pygame.sprite.Sprite):
     def update(self, dt):	
         direction = self.getValidKey()
         self.direction = direction
-
-        print(dt)
         self.position += self.directions[self.direction]*(self.speed*dt)
+        
 
     def getValidKey(self):
         key_pressed = pygame.key.get_pressed()
@@ -44,6 +43,9 @@ class Pacman(pygame.sprite.Sprite):
         if key_pressed[K_DOWN]:
             return DOWN
         if key_pressed[K_LEFT]:
+            #self.ff = open("record.txt", "a")
+            #self.ff.write("walk left 1")
+            #print('walk left 1')
             return LEFT
         if key_pressed[K_RIGHT]:
             return RIGHT
@@ -54,7 +56,7 @@ class Pacman(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=p)
 
         #pygame.draw.circle(screen, self.color, p, self.radius) #Replace it with something else
-        screen.blit(self.image, p)
+        screen.blit(self.image, (p[0]-18, p[1]-21))
 
     
 

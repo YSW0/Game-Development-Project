@@ -19,6 +19,7 @@ class GameController(object):
         self.background.fill(BLACK)
 
     def startGame(self):
+        self.f = open("record.txt", "a")
         self.setBackground()
         self.pacman = Pacman()
         self.target = Target()
@@ -38,19 +39,22 @@ class GameController(object):
 
     def update(self):
         dt = 1 #self.clock.tick() / 900.0
-        
         self.checkEvents()
-        if pygame.sprite.spritecollide(self.pacman, self.group, False, collided=pygame.sprite.collide_rect):
-            if self.pacman.getValidKey() == UP:
+        if pygame.sprite.spritecollide(self.pacman, self.group, False, collided=pygame.sprite.collide_rect_ratio(1)):
+            #self.f.write(self.pacman.rect.__str__())
+            #print(self.pacman.rect)
+            if self.pacman.direction == UP:             #Used to be self.pacman.getValidKey(). It is noted that key press and direction were not necessarily in sync. ie:: we got no Ket press, but the man can walk following previous miliseconds key press!
                 self.pacman.directions[UP] = np.array([0, 0])
                 self.pacman.position -= np.array([0, -1])
-            if self.pacman.getValidKey() == DOWN:
+            if self.pacman.direction == DOWN:
                 self.pacman.directions[DOWN] = np.array([0, 0])
                 self.pacman.position -= np.array([0, 1])
-            if self.pacman.getValidKey() == LEFT:
+            if self.pacman.direction == LEFT:
                 self.pacman.directions[LEFT] = np.array([0, 0])
                 self.pacman.position += np.array([1, 0])
-            if self.pacman.getValidKey() == RIGHT:
+                #self.f.write('right + 5')
+                #print('right + 5')
+            if self.pacman.direction == RIGHT:
                 self.pacman.directions[RIGHT] = np.array([0, 0])
                 self.pacman.position += np.array([-1, 0])
         
@@ -69,42 +73,40 @@ class GameController(object):
         
         if self.pacman.getValidKey() == UP:
             sprites_surf = pygame.image.load('hdhd.png').convert()
-            self.pacman.image.blit(sprites_surf, (0, 0), (0, 124, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (0, 124, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (42, 124, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (42, 124, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (84, 124, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (84, 124, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
 
         if self.pacman.getValidKey() == LEFT:
             sprites_surf = pygame.image.load('hdhd.png').convert()
-            self.pacman.image.blit(sprites_surf, (0, 0), (0, 42, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (0, 42, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (42, 42, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (42, 42, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (84, 42, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (84, 42, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
 
         if self.pacman.getValidKey() == RIGHT:
             sprites_surf = pygame.image.load('hdhd.png').convert()
-            self.pacman.image.blit(sprites_surf, (0, 0), (0, 83, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (0, 83, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (42, 83, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (42, 83, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (84, 83, 36, 45))
+            self.pacman.image.blit(sprites_surf, (0, 0), (84, 83, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
 
-
-            
         
 
         else:
@@ -118,6 +120,7 @@ class GameController(object):
     def checkEvents(self):
         for event in pygame.event.get():
             if event.type == QUIT:
+                self.f.close()
                 exit()
 
     def render(self):
@@ -126,6 +129,7 @@ class GameController(object):
         self.pacman.render(self.screen)
         self.target.render(self.screen)
         self.group.draw(self.screen)
+    
 
 
         pygame.display.update()
