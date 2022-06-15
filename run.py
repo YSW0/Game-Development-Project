@@ -38,37 +38,34 @@ class GameController(object):
         self.group.add(self.wall_6)
 
     def update(self):
-        dt = 1 #self.clock.tick() / 900.0
+        dt = self.clock.tick() / 1000.0
         self.checkEvents()
-
-        lim = 400
-        if game.wall_1.x < lim:
-            for element in game.group:
-                element.x = element.x*1.001
-                element.y = element.y*1.001
-                
-                element.width = element.width*1.001
-                element.height = element.height*1.001
                 
         
         if pygame.sprite.spritecollide(self.pacman, self.group, False, collided=pygame.sprite.collide_rect_ratio(1)):
             #self.f.write(self.pacman.rect.__str__())
             #print(self.pacman.rect)
             if self.pacman.direction == UP:             #Used to be self.pacman.getValidKey(). It is noted that key press and direction were not necessarily in sync. ie:: we got no Ket press, but the man can walk following previous miliseconds key press!
-                self.pacman.directions[UP] = np.array([0, 0])
-                self.pacman.position -= np.array([0, -1])
+                self.pacman.directions[UP] = Vector2(0, 0)
+                #self.pacman.directions[UP] = np.array([0, 0])
+                self.pacman.position -= Vector2(0, -1)#np.array([0, -1])
             if self.pacman.direction == DOWN:
-                self.pacman.directions[DOWN] = np.array([0, 0])
-                self.pacman.position -= np.array([0, 1])
+                self.pacman.directions[DOWN] = Vector2(0, 0)
+                #self.pacman.directions[DOWN] = np.array([0, 0])
+                self.pacman.position -= Vector2(0, 1)#np.array([0, 1])
             if self.pacman.direction == LEFT:
-                self.pacman.directions[LEFT] = np.array([0, 0])
-                self.pacman.position += np.array([1, 0])
+                self.pacman.directions[LEFT] = Vector2(0, 0)
+                #self.pacman.directions[LEFT] = np.array([0, 0])
+                self.pacman.position += Vector2(1, 0)#np.array([1, 0])
                 #self.f.write('right + 5')
                 #print('right + 5')
             if self.pacman.direction == RIGHT:
-                self.pacman.directions[RIGHT] = np.array([0, 0])
-                self.pacman.position += np.array([-1, 0])
-        
+                self.pacman.directions[RIGHT] = Vector2(0, 0)
+                #self.pacman.directions[RIGHT] = np.array([0, 0])
+                self.pacman.position += Vector2(-1, 0)#np.array([-1, 0])
+        else:
+            self.pacman.directions = {STOP:Vector2(0, 0), UP:Vector2(0,-1), DOWN:Vector2(0,1), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}#{STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:np.array([-1,0]), RIGHT:np.array([1,0])}#
+            
        
         if self.pacman.getValidKey() == DOWN:
             sprites_surf = pygame.image.load('hdhd.png').convert()
@@ -118,14 +115,20 @@ class GameController(object):
             self.pacman.render(self.screen)
             pygame.display.update()
 
-        
-
-        else:
-            self.pacman.directions = {STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:np.array([-1,0]), RIGHT:np.array([1,0])}#{STOP:Vector2(0, 0), UP:Vector2(0,-1), DOWN:Vector2(0,1), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}
             
         self.pacman.update(dt)
         self.target.update(dt)
+
+#self.wall.update(dt)
+        direction = self.pacman.getValidKey()
+        self.pacman.direction = direction
+        for wall in self.group:
+            wall.x -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
+            wall.y -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
+        self.target.position -= self.target.directions[self.pacman.direction] * self.target.speed*dt
         
+
+
         self.render()
 
     def checkEvents(self):
@@ -155,4 +158,15 @@ if __name__ == "__main__":
     
 while True:
     game.update()
+    lim = 260
+    if pygame.key.get_pressed()[K_1]:
+        while game.wall_1.height < lim:
+            pygame.time.delay(1)
+            for element in game.group:
+                element.x = element.x*1.001
+                element.y = element.y*1.001
+                element.width = element.width*1.001
+                element.height = element.height*1.001
+            game.target.position = game.target.position*1.001
+            game.update()
     
