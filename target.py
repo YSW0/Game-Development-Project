@@ -27,21 +27,25 @@ class Target(pygame.sprite.Sprite):
        # Fetch the rectangle object that has the dimensions of the image
        # Update the position of this object by setting the values of rect.x and rect.y
         self.rect = self.image.get_rect(center=(self.position[0], self.position[1]))
-        print(self.rect)
+        #print(self.rect)
 
 
     def update(self, dt):	
-        
-        self.step = self.step + dt
-        if 2 >= self.step % 5 > 1:
+        #print(self.direction)
+        self.step = self.step + 0.003
+        if 2 >= self.step % 4 > 1:
             self.direction = UP
-        if 3 >= self.step % 5 > 2:
+            self.position += self.directions[self.direction]*(self.speed*dt)
+        if 3 >= self.step % 4 > 2:
             self.direction = RIGHT
-        if 4 >= self.step % 5 > 3:
+            self.position += self.directions[self.direction]*(self.speed*dt)
+        if 4 >= self.step % 4 > 3:
             self.direction = DOWN
-        else:
+            self.position += self.directions[self.direction]*(self.speed*dt)
+        if 1 >= self.step % 4 > 0:
             self.direction = LEFT
-        self.position += self.directions[self.direction]*(self.speed*dt)
+            self.position += self.directions[self.direction]*(self.speed*dt)
+        
 
     
     def render(self, screen):

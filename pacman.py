@@ -20,9 +20,12 @@ class Pacman(pygame.sprite.Sprite):
         self.color = YELLOW
         
         sprites_surf = pygame.image.load('hdhd.png').convert()
+
         self.image = pygame.Surface([36, 42])
         self.rect = self.image.get_rect(center=(self.position[0], self.position[1]))
         self.image.blit(sprites_surf, (0, 0), (0, 0, 36, 42))
+        self.image.set_colorkey((0, 0, 0))
+        self.mask = pygame.mask.from_surface(self.image)
 
        # Fetch the rectangle object that has the dimensions of the image
        # Update the position of this object by setting the values of rect.x and rect.y

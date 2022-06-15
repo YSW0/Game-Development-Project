@@ -16,7 +16,7 @@ class GameController(object):
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
-        self.background.fill(BLACK)
+        self.background.fill((BLACK))
 
     def startGame(self):
         self.f = open("record.txt", "a")
@@ -40,6 +40,17 @@ class GameController(object):
     def update(self):
         dt = 1 #self.clock.tick() / 900.0
         self.checkEvents()
+
+        lim = 400
+        if game.wall_1.x < lim:
+            for element in game.group:
+                element.x = element.x*1.001
+                element.y = element.y*1.001
+                
+                element.width = element.width*1.001
+                element.height = element.height*1.001
+                
+        
         if pygame.sprite.spritecollide(self.pacman, self.group, False, collided=pygame.sprite.collide_rect_ratio(1)):
             #self.f.write(self.pacman.rect.__str__())
             #print(self.pacman.rect)
@@ -85,13 +96,13 @@ class GameController(object):
 
         if self.pacman.getValidKey() == LEFT:
             sprites_surf = pygame.image.load('hdhd.png').convert()
-            self.pacman.image.blit(sprites_surf, (0, 0), (0, 42, 36, 42))
+            self.pacman.image.blit(sprites_surf, (0, 0), (0, 43, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (42, 42, 36, 42))
+            self.pacman.image.blit(sprites_surf, (0, 0), (42, 43, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
-            self.pacman.image.blit(sprites_surf, (0, 0), (84, 42, 36, 42))
+            self.pacman.image.blit(sprites_surf, (0, 0), (84, 43, 36, 42))
             self.pacman.render(self.screen)
             pygame.display.update()
 
@@ -128,7 +139,9 @@ class GameController(object):
 
         self.pacman.render(self.screen)
         self.target.render(self.screen)
-        self.group.draw(self.screen)
+        for element in self.group:
+            element.render(self.screen)
+        #self.group.draw(self.screen)
     
 
 
@@ -142,3 +155,4 @@ if __name__ == "__main__":
     
 while True:
     game.update()
+    
