@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from constants import *
 from pacman import Pacman
+from pacmanLevel2 import PacmanSecond
 from Rect import Walls
 from target import Target
 from vector import Vector2
@@ -125,11 +126,78 @@ class GameController(object):
         for wall in self.group:
             wall.x -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
             wall.y -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
-        self.target.position -= self.target.directions[self.pacman.direction] * self.target.speed*dt
+        self.target.position -= self.pacman.directions[self.pacman.direction] * self.pacman.speed*dt
         
 
 
         self.render()
+    
+    def secondUpdate(self):
+        dt = self.clock.tick() / 1000.0
+        self.checkEvents()
+        if self.pacmanSecond.getValidKey() == DOWN:
+            sprites_surf = pygame.image.load('hdhd.png').convert()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (0, 0, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (42, 0, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (84, 0, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+        
+        if self.pacmanSecond.getValidKey() == UP:
+            sprites_surf = pygame.image.load('hdhd.png').convert()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (0, 124, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (42, 124, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (84, 124, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+
+        if self.pacmanSecond.getValidKey() == LEFT:
+            sprites_surf = pygame.image.load('hdhd.png').convert()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (0, 43, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (42, 43, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (84, 43, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+
+        if self.pacmanSecond.getValidKey() == RIGHT:
+            sprites_surf = pygame.image.load('hdhd.png').convert()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (0, 83, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (42, 83, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+            self.pacmanSecond.image.blit(sprites_surf, (0, 0), (84, 83, 36, 42))
+            self.pacmanSecond.render(self.screen)
+            pygame.display.update()
+        self.pacmanSecond.update(dt)
+        self.screen.blit(self.background, (0, 0))
+        self.pacmanSecond.render(self.screen)
+        pygame.display.update()
+
+    def secondScene(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
+        self.background = None
+        self.clock = pygame.time.Clock()
+        self.background = pygame.surface.Surface(SCREENSIZE).convert()
+        self.background.fill((BLACK))
+        self.pacmanSecond = PacmanSecond()
+        pygame.display.update()
+
+
 
     def checkEvents(self):
         for event in pygame.event.get():
@@ -169,4 +237,12 @@ while True:
                 element.height = element.height*1.001
             game.target.position = game.target.position*1.001
             game.update()
+    
+    if pygame.sprite.collide_rect(game.pacman, game.target):
+        break
+
+game.secondScene()
+
+while True:
+    game.secondUpdate()
     
