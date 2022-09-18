@@ -3,7 +3,10 @@ from pygame.locals import *
 from constants import *
 from pacman import Pacman
 from pacmanLevel2 import PacmanSecond
-from Rect import Walls
+from Rect import Bush, Wall1, Wall4
+from Rect import Wall2
+from Rect import Bound
+from Rect import Statues
 from target import Target
 from vector import Vector2
 import numpy as np
@@ -16,32 +19,59 @@ class GameController(object):
         self.clock = pygame.time.Clock()
         self.flagg = False
         pygame.mixer.init()
-        self.walk_sound = pygame.mixer.Sound('001.mp3')
+        self.walk_sound = pygame.mixer.Sound('steps.ogg')
         self.target_sound = pygame.mixer.Sound('003.mp3')
+        self.walk_sound.set_volume(1)
+        self.bgm = pygame.mixer.Sound('GameBGM.mp3')
+        self.bgm.set_volume(0.1)
+        self.bgm.play()
         
         
     
     def setBackground(self):
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
         self.background.fill((BLACK))
-        self.bi = pygame.image.load('grass_bcg.jpg').convert()
+        self.bi = pygame.image.load('Day.png').convert()
         self.blk = pygame.image.load('Black.jpg').convert()
         self.bix = 0
         self.biy = 0
+        self.fil = pygame.image.load('fill.png').convert()
+        self.filter = False
+        self.filterx = 0
+        self.filtery = 0
         self.background.blit(self.bi, (self.bix, self.biy))
 
     def startGame(self):
-        self.target_sound.play()
+        #self.target_sound.play()
         self.f = open("record.txt", "a")
         self.setBackground()
         self.pacman = Pacman()
         self.target = Target()
-        self.wall_1 = Walls(200, 192, 130, 130) #centerx, centery, width, height
+        self.wall_1 = Bush(200, 360) #centerx, centery, width, height
+        self.wall_2 = Bush(200, 760)
+        self.wall_3 = Bush(200, 960)
+        self.wall_4 = Wall2(350, 450)
+        self.wall_5 = Wall2(350, 682)
+        self.wall_12 = Wall2(350, 915)
+        self.wall_6 = Bound(500, 220, 2000, 10)
+        self.wall_7 = Bound(0, 384, 10, 2000)
+        self.wall_8 = Statues(1260, 500)
+        self.wall_9 = Wall1(600, 850)
+        self.wall_10 = Wall1(865, 850)
+        self.wall_11 = Wall1(1130, 850)
+        self.wall_13 = Wall4(900, 350)
+        self.wall_14 = Wall4(900, 500)
+        self.wall_17 = Wall4(1430, 800)
+        self.wall_18 = Wall2(200, 560)
+        self.wall_19 = Bound(500, 1124, 2000, 10)
+        self.wall_20 = Bound(1500, 384, 10, 2000)
+        '''
         self.wall_2 = Walls(200, 600, 130, 130)
         self.wall_3 = Walls(200, 400, 130, 130)
         self.wall_4 = Walls(490, 300, 50, 400)
         self.wall_5 = Walls(520, 550, 400, 50)
         self.wall_6 = Walls(670, 150, 200, 200)
+        '''
         self.group = pygame.sprite.Group()
         self.group.add(self.wall_1)
         self.group.add(self.wall_2)
@@ -49,7 +79,18 @@ class GameController(object):
         self.group.add(self.wall_4)
         self.group.add(self.wall_5)
         self.group.add(self.wall_6)
-
+        self.group.add(self.wall_7)
+        self.group.add(self.wall_8)
+        self.group.add(self.wall_9)
+        self.group.add(self.wall_10)
+        self.group.add(self.wall_11)
+        self.group.add(self.wall_12)
+        self.group.add(self.wall_13)
+        self.group.add(self.wall_14)
+        self.group.add(self.wall_17)
+        self.group.add(self.wall_18)
+        self.group.add(self.wall_19)
+        self.group.add(self.wall_20)
     def update(self):
         dt = self.clock.tick() / 1000.0
         self.checkEvents()
@@ -140,18 +181,56 @@ class GameController(object):
                 wall.x -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
                 wall.y -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
             self.target.position -= self.pacman.directions[self.pacman.direction] * self.pacman.speed*dt
-
-
+            '''
+            for wall in self.group:
+                if self.bix < 50:
+                    wall.x -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
+                
+                else:
+                    wall.x -= 1
+                    #self.target.position.x -= 1
+                if self.biy < 140:
+                    wall.y -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
+                    
+                else:
+                    wall.y -= 1
+                    #self.target.position.y -= 1
+            if self.bix < 50 and self.biy < 140:
+                self.target.position -= self.pacman.directions[self.pacman.direction] * self.pacman.speed*dt
+            elif self.bix < 50:
+                self.target.position.y -= 1
+            elif self.biy < 140:
+                self.target.position.x -= 1
+            '''
             self.background.blit(self.blk, (self.bix, self.biy))
+
             self.bix -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
             self.biy -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
+            self.filx = self.bix
+            self.fily = self.biy
+
             self.background.blit(self.bi, (self.bix, self.biy))
-            
+            if self.filter == True:
+                self.background.blit(self.fil, (self.filx, self.fily))
+            else:
+                self.background.blit(self.bi, (self.bix, self.biy))
+
+            '''
+            if self.bix < 50:
+                self.bix -= (self.pacman.directions[self.pacman.direction].x)*(self.pacman.speed*dt)
+            else:
+                self.bix -= 1
+            if self.biy < 140:
+                self.biy -= (self.pacman.directions[self.pacman.direction].y)*(self.pacman.speed*dt)
+            else:
+                self.biy -= 1
+            self.background.blit(self.bi, (self.bix, self.biy))
+            '''
             
         
 
         self.render()
-    
+    '''
     def secondUpdate(self):
         dt = self.clock.tick() / 1000.0
         self.checkEvents()
@@ -206,7 +285,7 @@ class GameController(object):
         self.screen.blit(self.background, (0, 0))
         self.pacmanSecond.render(self.screen)
         pygame.display.update()
-
+    '''
     def secondScene(self):
         pygame.init()
         self.screen = pygame.display.set_mode(SCREENSIZE, 0, 32)
@@ -214,7 +293,11 @@ class GameController(object):
         self.clock = pygame.time.Clock()
         self.background = pygame.surface.Surface(SCREENSIZE).convert()
         self.background.fill((BLACK))
-        self.pacmanSecond = PacmanSecond()
+        fontobj = setup_fonts(36)
+        wrapped_rect = pygame.Rect(0, 0, 1024, 768)
+        wrapped_surface = word_wrap(wrapped_rect, fontobj, (255, 255, 255), "Well done, you did it! Click 'x' to exit.")
+        self.screen.blit(wrapped_surface, wrapped_rect)
+        pygame.draw.rect(self.screen, (0,0,0), wrapped_rect, width=1)
         pygame.display.update()
 
 
@@ -234,7 +317,7 @@ class GameController(object):
             element.render(self.screen)
         #self.group.draw(self.screen)
 
-        pygame.display.update()
+        pygame.display.flip()
     
 def word_wrap(rect, font, color, text):
 
@@ -276,23 +359,47 @@ def setup_fonts(font_size, bold=False, italic=False):
 if __name__ == "__main__":
     game = GameController()
     game.startGame()
-    game.update()
+    #game.update()
+    
 
-    fontobj = setup_fonts(18)
-    wrapped_rect = pygame.Rect(100, 30, 210, 500)
-    wrapped_surface = word_wrap(wrapped_rect, fontobj, (200, 0, 0), "Press 1 to start your game")
+timer = 0
+while True:
+    game.checkEvents()
+    timer += 1
+    fontobj = setup_fonts(36)
+    wrapped_rect = pygame.Rect(0, 0, 1024, 768)
+    wrapped_surface = word_wrap(wrapped_rect, fontobj, (255, 255, 255), "After the text disappears, press '1' to start. Go Find The Yellow Box. Go night with key 'n'. To return the day, use key 'd'.")
     game.screen.blit(wrapped_surface, wrapped_rect)
     pygame.draw.rect(game.screen, (0,0,0), wrapped_rect, width=1)
-    pygame.display.flip()
+    pygame.display.update()
+    if timer > 650:
+        break
+enter = False
 
 while True:
-    
+
     game.update()
+
+    if pygame.key.get_pressed()[K_1]:
+        game.flagg = True
+    if pygame.key.get_pressed()[K_n]:
+        game.filter = True
+    if pygame.key.get_pressed()[K_d]:
+        game.filter = False
     '''
     distance = (game.target.position.x - game.pacman.position.x)*(game.target.position.x - game.pacman.position.x) + (game.target.position.y - game.pacman.position.y)*(game.target.position.y - game.pacman.position.y)
-    game.target_sound.set_volume(distance/20000)
+    if distance > 1000:
+        game.target_sound.set_volume(0.1)
+    elif distance > 700 and distance <= 1000:
+        game.target_sound.set_volume(0.4)
+    elif distance > 400 and distance <= 700:
+        game.target_sound.set_volume(0.7)
+    elif distance > 100 and distance <= 400:
+        game.target_sound.set_volume(0.8)
+    elif distance > 0 and distance <=100:
+        game.target_sound.set_volume(1)
     game.target_sound.play()
-    '''
+    
     lim = 260
     if pygame.key.get_pressed()[K_1]:
         game.flagg = True
@@ -305,20 +412,25 @@ while True:
                 element.height = element.height*1.001
             game.target.position = game.target.position*1.001
             game.update()
-    
+    '''
     if pygame.sprite.collide_rect(game.pacman, game.target):
+        game.walk_sound.stop()
+        game.bgm.stop()
         break
-    if pygame.key.get_pressed()[K_UP] or pygame.key.get_pressed()[K_DOWN] or pygame.key.get_pressed()[K_LEFT] or pygame.key.get_pressed()[K_RIGHT]:
-        if game.flagg == True:
-            game.walk_sound.play()
+    if enter == True:
+        if pygame.key.get_pressed()[K_UP] or pygame.key.get_pressed()[K_DOWN] or pygame.key.get_pressed()[K_LEFT] or pygame.key.get_pressed()[K_RIGHT]:
+            if game.flagg == True:
+                game.walk_sound.play()
+                enter = False
     else:
         game.walk_sound.stop()
-
+        enter = True
+    
+    if not pygame.mixer.get_busy():
+        game.bgm.play()
         
         
-
-game.secondScene()
-
 while True:
-    game.secondUpdate()
+    game.checkEvents()
+    game.secondScene()
     

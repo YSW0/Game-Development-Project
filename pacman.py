@@ -15,7 +15,7 @@ class Pacman(pygame.sprite.Sprite):
         #self.directions = {STOP:np.array([0, 0]), UP:np.array([0, -1]), DOWN:np.array([0, 1]), LEFT:np.array([-1,0]), RIGHT:np.array([1,0])}
         self.directions = {STOP:Vector2(0, 0), UP:Vector2(0, -1), DOWN:Vector2(0, 1), LEFT:Vector2(-1,0), RIGHT:Vector2(1,0)}
         self.direction = STOP
-        self.speed = 110
+        self.speed = 150
         self.radius = 10
         self.color = YELLOW
         
